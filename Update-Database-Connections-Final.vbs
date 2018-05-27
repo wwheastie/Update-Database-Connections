@@ -2,22 +2,22 @@
 Dim filePaths(8)
 
 'Set array of files to change
-filePaths(0) = "C:\Users\wheastie\Desktop\Database Strings Script\File Paths\1st Path\application.properties"
-filePaths(1) = "C:\Users\wheastie\Desktop\Database Strings Script\File Paths\1st Path\bootstrap.properties"
-filePaths(2) = "C:\Users\wheastie\Desktop\Database Strings Script\File Paths\1st Path\web.config"
-filePaths(3) = "C:\Users\wheastie\Desktop\Database Strings Script\File Paths\2nd Path\application-env.properties"
-filePaths(4) = "C:\Users\wheastie\Desktop\Database Strings Script\File Paths\2nd Path\bootstrap.properties"
-filePaths(5) = "C:\Users\wheastie\Desktop\Database Strings Script\File Paths\2nd Path\web.config"
-filePaths(6) = "C:\Users\wheastie\Desktop\Database Strings Script\File Paths\3rd Path\application.properties"
-filePaths(7) = "C:\Users\wheastie\Desktop\Database Strings Script\File Paths\3rd Path\context.xml"
+filePaths(0) = "...\propFileOne.properties"
+filePaths(1) = "...\propFileTwo.properties"
+filePaths(2) = "...\web.config"
+filePaths(3) = "...\propFileThree.properties"
+filePaths(4) = "...\propFileFour.properties"
+filePaths(5) = "...\configFileOne.config"
+filePaths(6) = "...\propFileFive.properties"
+filePaths(7) = "...\xmlFileOne.xml"
 
 'Set user database information
-serverName = "DEL8PWW1\\SQLEXPRESS"
-consoleDatabaseName = "Console"
-datamartDatabaseName = "Datamart"
-portNumber = "1433"
-userDBId = "sa"
-userDBPassword = "Password1234"
+serverName = ""
+firstDatabaseName = ""
+secondDatabaseName = ""
+portNumber = ""
+userDBId = ""
+userDBPassword = ""
 
 'Update each file in the filePaths array
 For i = 0 to 7
@@ -47,17 +47,17 @@ Function UpdateFile()
 		Set fso = CreateObject("Scripting.FileSystemObject")
 		Set readFileOne = fso.OpenTextFile(filePaths(i), 1)
 		
-		'Perform UpdateApplicationFile function if current file is application.properties or application-env.properties
-		If(fileType = "application.properties" OR fileType = "application-env.properties") Then
+		'Perform UpdateApplicationFile function if current file is propFileOne.properties or propFileThree.properties
+		If(fileType = "propFileOne.properties" OR fileType = "propFileThree.properties") Then
 			Call UpdateApplicationFile(readFileOne, valuesIndex, oldValues, newValues)
-		'Perform UpdateBootstrapFile function if current file is bootstrap.properties
-		ElseIf(fileType = "bootstrap.properties") Then
+		'Perform UpdateBootstrapFile function if current file is propFileTwo.properties
+		ElseIf(fileType = "propFileTwo.properties") Then
 			Call UpdateBootstrapFile(readFileOne, valuesIndex, oldValues, newValues)
-		'Perform UpdateContextFiile function if current file is context.xml
-		ElseIf(fileType = "context.xml") Then
+		'Perform UpdateContextFiile function if current file is xmlFileOne.xml
+		ElseIf(fileType = "xmlFileOne.xml") Then
 			Call UpdateContextFile(readFileOne, valuesIndex, oldValues, newValues)
-		'Perform UpdateWebFile function if current file is web.config
-		ElseIf(fileType = "web.config") Then
+		'Perform UpdateWebFile function if current file is configFileOne.config
+		ElseIf(fileType = "configFileOne.config") Then
 			Call UpdateWebFile(readFileOne, valuesIndex, oldValues, newValues)
 		End If
 		
@@ -92,7 +92,7 @@ Function UpdateFile()
 	
 End Function
 
-'This function is used to update application.properties and application-env.properties files
+'This function is used to update propFileOne.properties and propFileThree.properties files
 Function UpdateApplicationFile(file, valuesIndex, oldValues(), newValues())
 
 	'Set max values to be changed
@@ -124,7 +124,7 @@ Function UpdateApplicationFile(file, valuesIndex, oldValues(), newValues())
 
 End Function
 
-'This function is used to update the bootstrap.properties file
+'This function is used to update the propFileTwo.properties file
 Function UpdateBootstrapFile(file, valuesIndex, oldValues(), newValues())
 
 	'Set max values to be changed
@@ -141,25 +141,25 @@ Function UpdateBootstrapFile(file, valuesIndex, oldValues(), newValues())
 		currentFileLine = file.ReadLine
 		lineKey = Left(currentFileLine, InStr(currentFileLine, "="))
 		If(valuesIndex < maxValuesToChange) Then
-			If(lineKey = "OC.db.server=") Then
+			If(lineKey = "db.server=") Then
 				oldValues(valuesIndex) = currentFileLine
-				newValues(valuesIndex) = "OC.db.server=" & rootServerName 'May be an issue with DAL7NWH1\\SQLEXPRESS
+				newValues(valuesIndex) = "db.server=" & rootServerName 'May be an issue with DAL7NWH1\\SQLEXPRESS
 				valuesIndex = valuesIndex + 1
-			ElseIf(lineKey = "OC.db.sid=") Then
+			ElseIf(lineKey = "db.sid=") Then
 				oldValues(valuesIndex) = currentFileLine
-				newValues(valuesIndex) = "OC.db.sid=" & consoleDatabaseName
+				newValues(valuesIndex) = "db.sid=" & consoleDatabaseName
 				valuesIndex = valuesIndex + 1			
-			ElseIf(lineKey = "OC.db.port=") Then
+			ElseIf(lineKey = "db.port=") Then
 				oldValues(valuesIndex) = currentFileLine
-				newValues(valuesIndex) = "OC.db.port=" & portNumber
+				newValues(valuesIndex) = "db.port=" & portNumber
 				valuesIndex = valuesIndex + 1			
-			ElseIf(lineKey = "OC.db.userid=") Then
+			ElseIf(lineKey = "db.userid=") Then
 				oldValues(valuesIndex) = currentFileLine
-				newValues(valuesIndex) = "OC.db.userid=" & userDBId
+				newValues(valuesIndex) = "db.userid=" & userDBId
 				valuesIndex = valuesIndex + 1
-			ElseIf(lineKey = "OC.db.password=") Then
+			ElseIf(lineKey = "db.password=") Then
 				oldValues(valuesIndex) = currentFileLine
-				newValues(valuesIndex) = "OC.db.password=" & userDBPassword
+				newValues(valuesIndex) = "db.password=" & userDBPassword
 				valuesIndex = valuesIndex + 1		
 			End If
 		End If
@@ -167,7 +167,7 @@ Function UpdateBootstrapFile(file, valuesIndex, oldValues(), newValues())
 
 End Function
 
-'This function is used to update the context.xml file
+'This function is used to update the xmlFileOne.xml file
 Function UpdateContextFile(file, valuesIndex, oldValues(), newValues())
 	
 	'Initialize array of default keys
@@ -207,7 +207,7 @@ Function UpdateContextFile(file, valuesIndex, oldValues(), newValues())
 	
 End Function
 
-'This function is used to update the web.config file
+'This function is used to update the configFileOne.config file
 Function UpdateWebFile(file, valuesIndex, oldValues(), newValues())
 	
 	'Initialize array of default keys
@@ -215,7 +215,7 @@ Function UpdateWebFile(file, valuesIndex, oldValues(), newValues())
 	
 	'Set array of default keys
 	defaultKeys(0) = "connectionString="
-	defaultKeys(1) = "key=" & chr(34) & "ConsoleDBSchema" & chr(34)
+	defaultKeys(1) = "key=" & chr(34) & "DBSchema" & chr(34)
 	
 	'Set database connection url
 	databaseConnectionURL = chr(34) & "Data Source=localhost;Initial Catalog=" & datamartDatabaseName & ";User Id=" & userDBId & ";Password=" & userDBPassword & chr(34)
@@ -235,8 +235,8 @@ Function UpdateWebFile(file, valuesIndex, oldValues(), newValues())
 					newValues(valuesIndex) = "connectionString=" & databaseConnectionURL
 					valuesIndex = valuesIndex + 1
 				End If
-			'Code to perform if defaultKeys is key="ConsoleDBSchema"
-			ElseIf(defaultKeys(valuesIndex) = "key=" & chr(34) & "ConsoleDBSchema" & chr(34)) Then
+			'Code to perform if defaultKeys is key="DBSchema"
+			ElseIf(defaultKeys(valuesIndex) = "key=" & chr(34) & "DBSchema" & chr(34)) Then
 				oldValueString = SearchString(currentFileLine, defaultKeys(valuesIndex), 1)
 				If(oldValueString = defaultKeys(valuesIndex)) Then
 					keyOfOldValueString = SearchString(currentFileLine, "value=", 0)
